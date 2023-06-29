@@ -23,12 +23,12 @@ class ProductTest {
     public void updateProductTest() throws Exception {
         //given
         Product product = createProduct();
-        Product product1 = new Product("상품 2", 20000L, 5L);
+        Product product1 = new Product("상품 2", 20000L, 2L);
 
         //when
         String name = "상품 2";
         Long price = 20000L;
-        Long quantity = 5L;
+        Long quantity = 2L;
         product.updateProductInfo(name,price,quantity);
 
         //then
