@@ -22,8 +22,8 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(name = "username", nullable = false)
-    private String name;
+    @Column(nullable = false, updatable = false)
+    private String username;
 
     @Column(nullable = false)
     private String password;
@@ -43,13 +43,13 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Post> posts = new ArrayList<>();
 
-    public Member(String name, String password, String phoneNumber, Address address, List<Role> roles , List<Post> posts) {
-        this.name = name;
+    public Member(String username, String password, String phoneNumber, Address address, List<Role> roles , List<Post> posts) {
+        this.username = username;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.address = address;
 
-        addPosts(posts);
+        initPosts(posts);
         addRoles(roles);
     }
 
@@ -58,12 +58,20 @@ public class Member {
         this.roles = roleList;
     }
 
-    private void addPosts(List<Post> posts) {
+
+    private void initPosts(List<Post> posts) {
         posts.stream().forEach(
                 p -> {
                     posts.add(p);
-                    p.addMember(this);
+                    p.initMember(this);
                 }
         );
     }
+  
+    public void updateUserInfo(String password, String phoneNumber, Address address) {
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+    }
+
 }

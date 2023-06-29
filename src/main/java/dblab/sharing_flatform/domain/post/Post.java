@@ -68,7 +68,7 @@ public class Post extends BaseTime {
         );
     }
 
-    public void addMember(Member member) {
+    public void initMember(Member member) {
         if (this.member == null) {
             this.member = member;
         }
