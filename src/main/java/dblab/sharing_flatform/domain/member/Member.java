@@ -66,8 +66,4 @@ public class Member {
                 }
         );
     }
-
-    public String Hello(){
-        return "hello";
-    }
 }
