@@ -1,6 +1,5 @@
 package dblab.sharing_flatform.factory.message;
 
-import dblab.sharing_flatform.domain.member.Member;
 import dblab.sharing_flatform.domain.message.Message;
 
 import static dblab.sharing_flatform.factory.member.MemberFactory.createReceiveMember;

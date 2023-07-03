@@ -2,7 +2,7 @@ package dblab.sharing_flatform.domain.image;
 
 import dblab.sharing_flatform.domain.post.Post;
 import dblab.sharing_flatform.exception.image.NoExtException;
-import dblab.sharing_flatform.exception.image.UnsupportExtException;
+import dblab.sharing_flatform.exception.image.UnSupportExtException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -62,11 +62,11 @@ public class Image {
             if (supportFormat(ext)) {
                 return ext;
             } else {
-                throw new UnsupportExtException();
+                throw new UnSupportExtException();
             }
         } catch (StringIndexOutOfBoundsException e) {
             throw new NoExtException();
-        } catch (UnsupportExtException e) {
+        } catch (UnSupportExtException e) {
             throw e;
         }
     }

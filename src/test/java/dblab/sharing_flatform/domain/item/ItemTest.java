@@ -1,11 +1,9 @@
 package dblab.sharing_flatform.domain.item;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static dblab.sharing_flatform.factory.item.ItemFactory.createItem;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ItemTest {
 

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -16,26 +17,28 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class JwtFilter extends GenericFilterBean {
-
     public static final String AUTHORIZATION_HEADER = "Authorization";
-
     private final TokenProvider tokenProvider;
 
     // 인증/인가가 필요한 요청시 실행하는 필터
-
     // 토큰 검증 -> 인증정보 SecurityContext에 저장
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String jwt = extractTokenFromRequest(httpServletRequest);
 
-        // 1. 토큰 검증
+        if (httpServletRequest.getRequestURI().startsWith("/exception/invalid-token")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         if (StringUtils.hasText(jwt) && tokenProvider.validate(jwt)) {
             Authentication authentication = tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.debug("인증정보 -> Security Context에 저장");
+            log.debug("인증정보를 Security Context에 저장하였습니다.");
         } else {
             log.debug("유효하지 않은 JWT입니다.");
         }

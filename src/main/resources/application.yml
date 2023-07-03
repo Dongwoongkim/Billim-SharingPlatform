@@ -12,7 +12,11 @@ spring:
         show_sql: true
         default_batch_fetch_size: 100
 
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
+#echo 'wejfnwkandskjvnwejknfkjvnwekgwnkfnewfjkwnjkwnqkjnkjefwqjknwk'|base64
 jwt:
-  secret_key: cWxxbHpiZ2hrZHJtYWRoZmZscW10Cg== // # echo 'qlqlzbghkdrmadhfflqmt'|base64
+  secret_key: d2VqZm53a2FuZHNranZud2Vqa25ma2p2bndla2d3bmtmbmV3Zmprd25qa3ducWtqbmtqZWZ3cWprbndrCg==
   token-validity-in-seconds: 86400 # 24시간

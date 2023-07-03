@@ -13,11 +13,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberDetails implements UserDetails {
 
-    private final Long id;
+    private final String id;
     private final String username;
+    private final String password;
     private final List<? extends GrantedAuthority> authorities;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -33,7 +34,7 @@ public class MemberDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
 

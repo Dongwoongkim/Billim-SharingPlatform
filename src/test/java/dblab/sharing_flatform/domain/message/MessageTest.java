@@ -3,10 +3,8 @@ package dblab.sharing_flatform.domain.message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static dblab.sharing_flatform.factory.member.MemberFactory.*;
 import static dblab.sharing_flatform.factory.message.MessageFactory.createMessage;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MessageTest {
 

@@ -7,6 +7,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,8 +34,8 @@ public class JwtHandler {
 
     private Key secretKey;
 
-    public JwtHandler(@Value("{jwt.token-validity-in-seconds}") long tokenValiditySeconds,
-                      @Value("{jwt.secret_key}") String originSecretKey) {
+    public JwtHandler(@Value("${jwt.token-validity-in-seconds}") long tokenValiditySeconds,
+                      @Value("${jwt.secret_key}") String originSecretKey) {
         this.tokenValidityMilliSeconds =  tokenValiditySeconds * 1000;
         this.originSecretKey = originSecretKey;
     }
@@ -59,26 +60,21 @@ public class JwtHandler {
 
         MemberDetails principal = (MemberDetails) authentication.getPrincipal();
 
-        Long id = principal.getId();
-        String username = principal.getUsername();
-
-        // Details, 권한정보 -> Access-Token의 Claim에 담음
-
-        // authorities = "ADMIN,USER,MANAGER" in ADMIN-CASE
         String authorities = principal.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        // 2. 토큰 만료시간 설정 (현재시간 + 1시간)
         long now = new Date().getTime();
         Date validity = new Date(now + this.tokenValidityMilliSeconds);
 
-        return Jwts.builder()
-                .addClaims(Map.of(AUTH_ID, id)) // 유저 정보 id
-                .addClaims(Map.of(AUTH_USERNAME, username)) // 유저 정보 username
-                .addClaims(Map.of(AUTH_KEY, authorities)) // 권한 정보
+        String jwt = Jwts.builder()
+                .addClaims(Map.of(AUTH_ID, principal.getId()))
+                .addClaims(Map.of(AUTH_USERNAME, principal.getUsername()))
+                .addClaims(Map.of(AUTH_KEY, authorities))
+                .signWith(secretKey, SignatureAlgorithm.HS256)
                 .setExpiration(validity)
                 .compact();
+        return jwt;
     }
 
     /** 권한이 필요한 Request에서 사용
@@ -97,11 +93,10 @@ public class JwtHandler {
 
         List<? extends GrantedAuthority> simpleGrantedAuthorities = authorities.stream().map(auth -> new SimpleGrantedAuthority(auth)).collect(Collectors.toList());
 
-        MemberDetails principal = new MemberDetails((Long) claims.get(AUTH_ID),(String) claims.get(AUTH_USERNAME), simpleGrantedAuthorities);
+        MemberDetails principal = new MemberDetails((String) claims.get(AUTH_ID),(String) claims.get(AUTH_USERNAME), null, simpleGrantedAuthorities);
 
-        return new UsernamePasswordAuthenticationToken(principal.getUsername(), token, simpleGrantedAuthorities);
+        return new UsernamePasswordAuthenticationToken(principal, token, simpleGrantedAuthorities);
     }
-
 
     /** 토큰 검증
      */
@@ -111,19 +106,16 @@ public class JwtHandler {
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
+            throw new ValidateTokenException();
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다.");
+            throw new ValidateTokenException();
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");
+            throw new ValidateTokenException();
         } catch (IllegalArgumentException e) {
             log.info("JWT 토큰이 잘못되었습니다.");
+            throw new ValidateTokenException();
         }
-
-        throw new ValidateTokenException();
     }
-
-
-
-
-
 }

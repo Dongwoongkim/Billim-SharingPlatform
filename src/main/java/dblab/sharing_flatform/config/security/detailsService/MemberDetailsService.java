@@ -25,7 +25,7 @@ public class MemberDetailsService implements UserDetailsService {
     // authenticate() 메소드 실행 시 넘어온 UsernamePasswordAuthentication 내부에
     // username, password 추출
     // username ->  role까지 graph로 조회
-    // password ->  DaoAuthenticationProvider가 자동 비교
+    // password ->  DaoAuthenticationProvider가 Encoding된 Password와 DB의 password 자동 비교
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Member> member = Optional.ofNullable(memberRepository.findOneWithRolesByUsername(username).
@@ -36,8 +36,9 @@ public class MemberDetailsService implements UserDetailsService {
 
     private UserDetails createUser(Member member) {
         List<MemberRole> roles = member.getRoles();
-        List<SimpleGrantedAuthority> authorities = roles.stream().map(mr -> new SimpleGrantedAuthority(mr.getRole().getRoleType().toString())).collect(Collectors.toList());
+        List<SimpleGrantedAuthority> authorities = roles.stream().
+                map(mr -> new SimpleGrantedAuthority(mr.getRole().getRoleType().toString())).collect(Collectors.toList());
 
-        return new MemberDetails(member.getId(), member.getUsername(), authorities);
+        return new MemberDetails(String.valueOf(member.getId()), member.getUsername(), member.getPassword(), authorities);
     }
 }

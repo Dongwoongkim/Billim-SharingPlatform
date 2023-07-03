@@ -4,7 +4,9 @@ import dblab.sharing_flatform.domain.address.Address;
 import dblab.sharing_flatform.domain.post.Post;
 import dblab.sharing_flatform.domain.role.Role;
 import dblab.sharing_flatform.domain.role.RoleType;
+import dblab.sharing_flatform.dto.member.MemberUpdateRequestDto;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
@@ -35,23 +37,22 @@ public class Member {
     private Address address;
 
     // roles -> 기본전략 : 지연로딩
-    @OneToMany
-    @JoinColumn(name = "role_id")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<MemberRole> roles = new ArrayList<>();
 
     // post
     @OneToMany(mappedBy = "member")
     private List<Post> posts = new ArrayList<>();
 
-    public Member(String username, String password, String phoneNumber, Address address, List<Role> roles , List<Post> posts) {
+    public Member(String username, String password, String phoneNumber, Address address, List<Role> roles, List<Post> posts) {
         this.username = username;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.address = address;
-
         initPosts(posts);
         addRoles(roles);
     }
+
 
     private void addRoles(List<Role> roles) {
         List<MemberRole> roleList = roles.stream().map(role -> new MemberRole(this, role)).collect(Collectors.toList());
@@ -60,18 +61,26 @@ public class Member {
 
 
     private void initPosts(List<Post> posts) {
-        posts.stream().forEach(
+        if (!posts.isEmpty()) {
+            posts.stream().forEach(
                 p -> {
                     posts.add(p);
                     p.initMember(this);
                 }
-        );
+            );
+        }
     }
 
     public void updateUserInfo(String password, String phoneNumber, Address address) {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.address = address;
+    }
+
+    public void updateMember(MemberUpdateRequestDto memberUpdateRequestDto){
+        this.password = memberUpdateRequestDto.getPassword();
+        this.phoneNumber = memberUpdateRequestDto.getPhoneNumber();
+        this.address = memberUpdateRequestDto.getAddress();
     }
 
 }
