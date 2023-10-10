@@ -93,11 +93,19 @@ public class MessageService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
 
-        if (post.getMember().getNickname().equals(receiver.getNickname()) || // 게시글 작성자와 메시지 수신자가 일치하거나
-                (post.getMember().getNickname().equals(sender.getNickname()) && messageRepository.findBySenderIdAndPostId(receiver.getId(), post.getId()).isPresent())) { // 게시글에 대해 받은 메시지가 있는 경우
+        if (isEqualToPostWriter(receiver, post) || // 게시글 작성자와 메시지 수신자가 일치하거나
+                (isEqualToPostWriter(sender, post) && existedPreviousMessage(receiver, post))) { // 게시글에 대해 받은 메시지가 있는 경우
             return post;
         } else {
             throw new SendMessageException();
         }
+    }
+
+    private boolean existedPreviousMessage(Member receiver, Post post) {
+        return messageRepository.findBySenderIdAndPostId(receiver.getId(), post.getId()).isPresent();
+    }
+
+    private boolean isEqualToPostWriter(Member receiver, Post post) {
+        return post.getMember().getNickname().equals(receiver.getNickname());
     }
 }

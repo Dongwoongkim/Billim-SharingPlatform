@@ -60,7 +60,7 @@ public class SecurityConfig {
                 .userDetailsService(memberDetailsService)
 
                 .authorizeRequests()
-                .antMatchers("/home", "/auth/sign-up", "/auth/login").permitAll()
+                .antMatchers( "/api/auth/sign-up", "/api/auth/login").permitAll()
                 .antMatchers("/swagger-uri/**", "/swagger-resources/**", "/v3/api-docs/**").permitAll()
 
                 .antMatchers(HttpMethod.GET, "/api/members").permitAll()
