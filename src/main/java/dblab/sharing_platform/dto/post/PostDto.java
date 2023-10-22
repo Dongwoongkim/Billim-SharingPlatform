@@ -21,6 +21,7 @@ public class PostDto {
     private Long itemPrice;
     private String nickname;
     private String link;
+    private boolean complete;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
@@ -31,6 +32,7 @@ public class PostDto {
                 post.getItem() != null ? post.getItem().getPrice() : null,
                 post.getMember().getNickname(),
                 post.getPostImages().isEmpty() ? "testImage.jpg" : post.getPostImages().get(0).getUniqueName(),
+                post.isComplete(),
                 post.getCreatedTime());
     }
 

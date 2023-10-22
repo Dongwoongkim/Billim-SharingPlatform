@@ -73,6 +73,7 @@ public class Trade {
 
     public void isTradeComplete(boolean value){
         this.tradeComplete = value;
+        this.getPost().completed(true);
     }
 
     public void deleteReview(){
@@ -80,6 +81,7 @@ public class Trade {
             this.review = null;
             this.writtenReview = false;
         }
+        this.getPost().completed(false);
     }
 }
 

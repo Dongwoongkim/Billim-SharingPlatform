@@ -92,8 +92,8 @@ public class ReviewServiceTest {
         List<Review> reviews = new ArrayList<>();
         List<ReviewDto> reviewDtoList = new ArrayList<>();
 
-        reviews.add(new Review("review 1", member, reviewerMember));
-        reviews.add(new Review("review 2", member, reviewerMember));
+        reviews.add(new Review("review 1", member, reviewerMember, null));
+        reviews.add(new Review("review 2", member, reviewerMember, null));
 
         reviewDtoList.add(ReviewDto.toDto(reviews.get(0)));
         reviewDtoList.add(ReviewDto.toDto(reviews.get(1)));
@@ -127,8 +127,8 @@ public class ReviewServiceTest {
         List<Review> reviews = new ArrayList<>();
         List<ReviewDto> reviewDtoList = new ArrayList<>();
 
-        reviews.add(new Review("review 1", member, reviewerMember));
-        reviews.add(new Review("review 2", member, reviewerMember));
+        reviews.add(new Review("review 1", member, reviewerMember, null));
+        reviews.add(new Review("review 2", member, reviewerMember, null));
 
         reviewDtoList.add(ReviewDto.toDto(reviews.get(0)));
         reviewDtoList.add(ReviewDto.toDto(reviews.get(1)));
@@ -161,8 +161,8 @@ public class ReviewServiceTest {
         List<Review> reviews = new ArrayList<>();
         List<ReviewDto> reviewDtoList = new ArrayList<>();
 
-        reviews.add(new Review("review 1", member, reviewerMember));
-        reviews.add(new Review("review 2", member, reviewerMember));
+        reviews.add(new Review("review 1", member, reviewerMember,null));
+        reviews.add(new Review("review 2", member, reviewerMember,null));
 
         reviewDtoList.add(ReviewDto.toDto(reviews.get(0)));
         reviewDtoList.add(ReviewDto.toDto(reviews.get(1)));

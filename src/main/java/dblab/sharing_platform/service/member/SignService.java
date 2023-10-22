@@ -115,6 +115,7 @@ public class SignService {
     public LogInResponse login(LoginRequest request) {
         memberRepository.findByUsername(request.getUsername())
                 .orElseThrow(MemberNotFoundException::new);
+
         List<String> tokens = jwtLoginRequest(request);
         String accessToken = tokens.get(0);
         String refreshToken = tokens.get(1);

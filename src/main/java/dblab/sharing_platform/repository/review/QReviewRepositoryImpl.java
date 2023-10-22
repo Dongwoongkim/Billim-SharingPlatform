@@ -76,6 +76,7 @@ public class QReviewRepositoryImpl extends QuerydslRepositorySupport implements 
                 query
                         .select(constructor(ReviewDto.class,
                                 review.id,
+                                review.trade.id,
                                 review.member.nickname,
                                 review.writer.nickname,
                                 review.content))

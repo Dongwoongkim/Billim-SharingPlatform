@@ -76,10 +76,10 @@ values ('공지사항', null),
        ('신고게시판', 39);
 
 
-INSERT INTO post (created_time, last_modified, category_id, content, name, price, quantity, likes, member_id, title)
-values (now(), now(), 1, '공지사항 내용입니다.', null, null, null, 0, 1, '필독 공지사항'),
-       (now(), now(), 4, '아이패드5 PRO 대여해드립니다.', '아이패드 프로5', 50000, 1, 0, 3, '아이패드5 PRO 대여해드립니다.'),
-       (now(), now(), 13, '할리갈리, 마피아, 뱅 등 다수 보드게임 대여해드립니다. 자세한 사항은 쪽지나 채팅주세요', '보드 게임', 5000, 1, 0, 3, '보드게임 대여해드립니다. 종류 많음');
+INSERT INTO post (created_time, last_modified, category_id, content, name, price, quantity, likes, member_id, title, complete)
+values (now(), now(), 1, '공지사항 내용입니다.', null, null, null, 0, 1, '필독 공지사항', false),
+       (now(), now(), 4, '아이패드5 PRO 대여해드립니다.', '아이패드 프로5', 50000, 1, 0, 3, '아이패드5 PRO 대여해드립니다.', true),
+       (now(), now(), 13, '할리갈리, 마피아, 뱅 등 다수 보드게임 대여해드립니다. 자세한 사항은 쪽지나 채팅주세요', '보드 게임', 5000, 1, 0, 3, '보드게임 대여해드립니다. 종류 많음', true);
 
 
 INSERT INTO comment (created_time, last_modified, content, deleted, member_id, parent_id, post_id, root)
@@ -96,15 +96,9 @@ values ('okvv26입니다. 대여하고 싶어서 쪽지 드렸습니다.', false
        ('네. 근데 일주일간 빌린다고 하시면 어느정도 깎아드릴게요!!', false, false, 4, 3, now(), false, 3);
 
 
-
-INSERT INTO review (writer_id, member_id, content)
-values (4, 3, '굿굿'),
-       (5, 3, '잘썼습니다.');
-
-
 INSERT INTO trade (render_id, start_date, end_date, trade_complete, written_review, borrower_id, post_id, review_id)
-values (3, now(), now(), true, true, 4, 2, 1),
-       (3, now(), now(), true, true, 5, 3, 2);
+values (3, now(), now(), true, false, 4, 2, null),
+       (3, now(), now(), true, false, 5, 3, null);
 
 
 INSERT INTO report (content, report_type, post_id, reported_id, reporter_id)

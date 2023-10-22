@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class ReviewResponse {
 
     private Long id;
+    private Long tradeId;
     private String content;
     private String writer;
 
@@ -19,6 +20,7 @@ public class ReviewResponse {
         if (review != null) {
             return new ReviewResponse(
                     review.getId(),
+                    review.getTrade().getId(),
                     review.getContent(),
                     review.getWriter().getNickname());
         } else {

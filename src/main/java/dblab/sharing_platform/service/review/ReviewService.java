@@ -48,7 +48,8 @@ public class ReviewService {
 
         Review review = new Review(reviewRequest.getContent(),
                 member,
-                writer);
+                writer,
+                trade);
 
         reviewRepository.save(review);
         trade.addReview(review);
@@ -61,11 +62,11 @@ public class ReviewService {
     public void deleteReviewByTradeId(Long tradeId) {
         Trade trade = tradeRepository.findById(tradeId)
                 .orElseThrow(TradeNotFoundException::new);
-        Review review = reviewRepository.findById(trade.getReview().getId())
-                .orElseThrow(ReviewNotFoundException::new);
-        trade.deleteReview();
-
-        reviewRepository.delete(review);
+        if (trade.getReview() != null) {
+            Review review = reviewRepository.findById(trade.getReview().getId()).orElseThrow(ReviewNotFoundException::new);
+            trade.deleteReview();
+            reviewRepository.delete(review);
+        }
     }
 
     public PagedReviewListDto findAllReviewsWriteByAdmin(ReviewPagingCondition cond) {

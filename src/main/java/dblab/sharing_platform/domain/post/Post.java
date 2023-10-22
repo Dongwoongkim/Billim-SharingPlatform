@@ -51,6 +51,9 @@ public class Post extends BaseTime {
     @Column(nullable = false)
     private Integer likes;
 
+    @Column(nullable = false)
+    private boolean complete;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -74,6 +77,7 @@ public class Post extends BaseTime {
         this.category = category;
         this.item = item;
         this.member = member;
+        this.complete = false;
         this.postImages = new ArrayList<>();
 
         addImages(postImages, this.postImages, this);
@@ -99,4 +103,7 @@ public class Post extends BaseTime {
         this.likes --;
     }
 
+    public void completed(boolean value) {
+        this.complete = value;
+    }
 }

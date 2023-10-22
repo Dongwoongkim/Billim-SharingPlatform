@@ -1,6 +1,7 @@
 package dblab.sharing_platform.domain.review;
 
 import dblab.sharing_platform.domain.member.Member;
+import dblab.sharing_platform.domain.trade.Trade;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 
 @Getter
@@ -39,9 +41,14 @@ public class Review {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member writer;
 
-    public Review (String content, Member member, Member writer){
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trade_id")
+    private Trade trade;
+
+    public Review(String content, Member member, Member writer, Trade trade) {
         this.content = content;
         this.member = member;
         this.writer = writer;
+        this.trade = trade;
     }
 }

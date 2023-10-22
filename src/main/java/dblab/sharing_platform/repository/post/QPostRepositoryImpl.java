@@ -79,6 +79,7 @@ public class QPostRepositoryImpl extends QuerydslRepositorySupport implements QP
                                 post.item.price,
                                 post.member.nickname,
                                 postImage.uniqueName.coalesce(DEFAULT_IMAGE),
+                                post.complete,
                                 post.createdTime))
                         .from(post)
                         .leftJoin(post.postImages, postImage)

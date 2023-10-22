@@ -15,12 +15,13 @@ import java.util.stream.Collectors;
 public class ReviewDto {
 
     private Long reviewId;
+    private Long tradeId;
     private String receiver;
     private String writer;
     private String content;
 
     public static ReviewDto toDto(Review review) {
-        return new ReviewDto(review.getId(), review.getMember().getNickname(), review.getWriter().getNickname(), review.getContent());
+        return new ReviewDto(review.getId(), review.getTrade().getId(), review.getMember().getNickname(), review.getWriter().getNickname(), review.getContent());
     }
 
     public static List<ReviewDto> toDtoList(List<Review> reviews) {
