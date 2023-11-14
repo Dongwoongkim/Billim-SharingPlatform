@@ -112,6 +112,4 @@ public class  Member {
 
         return this.profileImage.getUniqueName();
     }
-
-
 }

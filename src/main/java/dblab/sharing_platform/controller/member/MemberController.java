@@ -44,7 +44,8 @@ public class MemberController {
 
     @ApiOperation(value = "회원 프로필 정보 조회", notes = "회원의 프로필 정보를 조회합니다.")
     @GetMapping("/{username}")
-    public ResponseEntity findMemberProfileByUsername(@ApiParam(name = "검색할 사용자 아이디", required = true) @PathVariable String username) {
+    public ResponseEntity findMemberProfileByUsername(@ApiParam(name = "검색할 사용자 아이디", required = true)
+                                                          @PathVariable String username) {
         return new ResponseEntity(memberService.readMemberProfileByNickname(username), OK);
     }
 
