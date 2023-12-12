@@ -65,6 +65,7 @@ public class PostController {
     public ResponseEntity createPost(@Valid @ModelAttribute PostCreateRequest postCreateRequest) {
         return new ResponseEntity(postService.createPost(postCreateRequest, getCurrentUsernameCheck()), CREATED);
     }
+    
     @ApiOperation(value = "게시글 삭제", notes = "해당 번호의 게시글을 삭제한다.")
     @DeleteMapping("/{postId}")
     public ResponseEntity deletePostByPostId(@ApiParam(value = "삭제할 게시글 id", required = true) @PathVariable Long postId) {

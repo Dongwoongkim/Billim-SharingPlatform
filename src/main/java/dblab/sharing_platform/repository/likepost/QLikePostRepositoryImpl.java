@@ -54,6 +54,7 @@ public class QLikePostRepositoryImpl extends QuerydslRepositorySupport implement
                                 likePost.post.item.price,
                                 likePost.post.member.nickname,
                                 postImage.uniqueName.coalesce(DEFAULT_IMAGE_NAME),
+                                likePost.post.complete,
                                 likePost.post.createdTime))
                         .from(likePost)
                         .leftJoin(likePost.post.postImages, postImage)

@@ -14,13 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.validation.Valid;
-
 import static dblab.sharing_platform.config.security.util.SecurityUtil.getCurrentUsernameCheck;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
-
 
 @Api(value = "Comment Controller", tags = "Comment")
 @RestController
@@ -39,7 +36,6 @@ public class CommentController {
     @PostMapping("/posts/{postId}/comments")
     public ResponseEntity createCommentWithPostId(@ApiParam(value = "Post ID", required = true) @PathVariable Long postId,
             @Valid @RequestBody CommentCreateRequest request) {
-
         return new ResponseEntity(commentService.createCommentWithPostId(postId, request, getCurrentUsernameCheck()), CREATED);
     }
 
@@ -47,7 +43,6 @@ public class CommentController {
     @DeleteMapping("/comments/{commentId}")
     public ResponseEntity deleteCommentByCommentId(@ApiParam(value = "삭제할 Comment ID", required = true) @PathVariable Long commentId) {
         commentService.deleteCommentByCommentId(commentId);
-
         return new ResponseEntity(OK);
     }
 }
