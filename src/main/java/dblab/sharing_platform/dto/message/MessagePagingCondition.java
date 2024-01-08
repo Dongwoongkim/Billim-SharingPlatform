@@ -1,14 +1,11 @@
 package dblab.sharing_platform.dto.message;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import lombok.Data;
 
 @Data
-@AllArgsConstructor
 public class MessagePagingCondition {
 
     @NotNull(message = "페이지 번호를 입력해주세요.")

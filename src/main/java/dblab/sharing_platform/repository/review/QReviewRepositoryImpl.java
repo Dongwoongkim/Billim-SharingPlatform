@@ -1,11 +1,15 @@
 package dblab.sharing_platform.repository.review;
 
+import static com.querydsl.core.types.Projections.constructor;
+import static dblab.sharing_platform.domain.review.QReview.review;
+
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import dblab.sharing_platform.domain.review.Review;
 import dblab.sharing_platform.dto.review.ReviewDto;
 import dblab.sharing_platform.dto.review.ReviewPagingCondition;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -14,13 +18,9 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
-
-import static com.querydsl.core.types.Projections.constructor;
-import static dblab.sharing_platform.domain.review.QReview.review;
-
 @Repository
 public class QReviewRepositoryImpl extends QuerydslRepositorySupport implements QReviewRepository {
+    
     private final JPAQueryFactory query;
 
     public QReviewRepositoryImpl(JPAQueryFactory query) {
@@ -73,8 +73,7 @@ public class QReviewRepositoryImpl extends QuerydslRepositorySupport implements 
     private List<ReviewDto> fetchAll(Predicate predicate, Pageable pageable) {
         return getQuerydsl().applyPagination(
                 pageable,
-                query
-                        .select(constructor(ReviewDto.class,
+                query.select(constructor(ReviewDto.class,
                                 review.id,
                                 review.trade.id,
                                 review.member.nickname,
@@ -87,7 +86,10 @@ public class QReviewRepositoryImpl extends QuerydslRepositorySupport implements 
         ).fetch();
     }
 
-    private Long fetchCount(Predicate predicate) { // 7
-        return query.select(review.count()).from(review).where(predicate).fetchOne();
+    private Long fetchCount(Predicate predicate) {
+        return query.select(review.count())
+                .from(review)
+                .where(predicate)
+                .fetchOne();
     }
 }

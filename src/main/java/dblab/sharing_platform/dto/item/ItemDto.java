@@ -22,8 +22,7 @@ public class ItemDto {
             return new ItemDto(item.getName(),
                     item.getPrice(),
                     item.getQuantity());
-        } else {
-            return null;
         }
+        return null;
     }
 }

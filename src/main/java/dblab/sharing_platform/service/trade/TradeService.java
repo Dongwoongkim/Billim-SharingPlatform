@@ -29,7 +29,7 @@ public class TradeService {
     private final PostRepository postRepository;
 
     @Transactional
-    public TradeResponse createTradeByPostId(TradeRequest tradeRequest, Long id, String username){
+    public TradeResponse createTradeByPostId(TradeRequest tradeRequest, Long id, String username) {
         Member render = memberRepository.findByUsername(username)
                 .orElseThrow(MemberNotFoundException::new);
         Member borrower = memberRepository.findByNickname(tradeRequest.getBorrowerName())
@@ -40,9 +40,9 @@ public class TradeService {
         validateCreateTrade(id, borrower, render);
 
         Trade trade = new Trade(render, borrower,
-                        tradeRequest.getStartDate(),
-                        tradeRequest.getEndDate(),
-                        post);
+                tradeRequest.getStartDate(),
+                tradeRequest.getEndDate(),
+                post);
 
         tradeRepository.save(trade);
         return TradeResponse.toDto(trade);
@@ -81,11 +81,10 @@ public class TradeService {
     }
 
     private void validateCreateTrade(Long id, Member borrower, Member render) {
-        tradeRepository.findByPostId(id)
-                .ifPresent(e -> {
+        if (tradeRepository.findByPostId(id).isPresent()) {
             throw new ExistTradeException();
-            });
-
+        }
+        
         if (render.getNickname().equals(borrower.getNickname())) {
             throw new ImpossibleCreateTradeException();
         }

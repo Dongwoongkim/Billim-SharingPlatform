@@ -1,6 +1,9 @@
 package dblab.sharing_platform.service.member;
 
 
+import static dblab.sharing_platform.config.file.FileInfo.FOLDER_NAME_MEMBER_PROFILE;
+import static dblab.sharing_platform.config.file.FileInfo.FOLDER_NAME_POST;
+
 import dblab.sharing_platform.domain.image.PostImage;
 import dblab.sharing_platform.domain.member.Member;
 import dblab.sharing_platform.domain.post.Post;
@@ -16,27 +19,24 @@ import dblab.sharing_platform.exception.member.MemberNotFoundException;
 import dblab.sharing_platform.repository.member.MemberRepository;
 import dblab.sharing_platform.repository.post.PostRepository;
 import dblab.sharing_platform.service.file.FileService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
-import static dblab.sharing_platform.config.file.FileInfo.FOLDER_NAME_MEMBER_PROFILE;
-import static dblab.sharing_platform.config.file.FileInfo.FOLDER_NAME_POST;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberService {
+
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
     private final FileService fileService;
 
-    public MemberPrivateDto readCurrentUserInfoByUsername(String username){
+    public MemberPrivateDto readCurrentUserInfoByUsername(String username) {
         return MemberPrivateDto.toDto(memberRepository.findByUsername(username)
                 .orElseThrow(MemberNotFoundException::new));
     }
@@ -45,7 +45,7 @@ public class MemberService {
         List<Post> posts = postRepository.findAllWithMemberByNickname(nickname);
         return MemberProfileDto.toDto(
                 memberRepository.findByNickname(nickname)
-                .orElseThrow(MemberNotFoundException::new),
+                        .orElseThrow(MemberNotFoundException::new),
                 PostDto.toDtoList(posts));
     }
 
@@ -54,7 +54,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void deleteMemberByUsername(String username){
+    public void deleteMemberByUsername(String username) {
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(MemberNotFoundException::new);
         List<Post> posts = postRepository.findAllWithMemberByNickname(member.getNickname());
@@ -63,7 +63,7 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberPrivateDto updateMember(String username, MemberUpdateRequest request){
+    public MemberPrivateDto updateMember(String username, MemberUpdateRequest request) {
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(MemberNotFoundException::new);
         memberUpdate(request, member);
@@ -71,15 +71,11 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberPrivateDto oauthMemberUpdate(String username, OAuthMemberUpdateRequest request){
+    public MemberPrivateDto oauthMemberUpdate(String username, OAuthMemberUpdateRequest request) {
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(MemberNotFoundException::new);
         oAuthMemberUpdate(request, member);
         return MemberPrivateDto.toDto(member);
-    }
-
-    private String encodeRawPassword(String password) {
-        return passwordEncoder.encode(password);
     }
 
     private void memberUpdate(MemberUpdateRequest request, Member member) {

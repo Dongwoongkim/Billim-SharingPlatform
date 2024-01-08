@@ -29,11 +29,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ReviewService {
 
+    public static final String REVIEW_COMPLETE_MESSAGE = "님이 거래에 대한 리뷰를 작성했습니다.";
+
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
     private final TradeRepository tradeRepository;
     private final NotificationHelper notificationHelper;
-    public static final String REVIEW_COMPLETE_MESSAGE = "님이 거래에 대한 리뷰를 작성했습니다.";
 
     @Transactional
     public ReviewResponse writeReviewByTradeId(ReviewRequest reviewRequest, Long tradeId, String username) {
@@ -62,8 +63,10 @@ public class ReviewService {
     public void deleteReviewByTradeId(Long tradeId) {
         Trade trade = tradeRepository.findById(tradeId)
                 .orElseThrow(TradeNotFoundException::new);
+        
         if (trade.getReview() != null) {
-            Review review = reviewRepository.findById(trade.getReview().getId()).orElseThrow(ReviewNotFoundException::new);
+            Review review = reviewRepository.findById(trade.getReview().getId())
+                    .orElseThrow(ReviewNotFoundException::new);
             trade.deleteReview();
             reviewRepository.delete(review);
         }

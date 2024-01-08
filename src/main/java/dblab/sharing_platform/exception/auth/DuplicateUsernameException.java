@@ -1,4 +1,4 @@
 package dblab.sharing_platform.exception.auth;
 
-public class DuplicateUsernameException extends RuntimeException{
+public class DuplicateUsernameException extends RuntimeException {
 }

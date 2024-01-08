@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ReportService {
+
     private final ReportRepository reportRepository;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
@@ -30,12 +31,11 @@ public class ReportService {
                 .orElseThrow(PostNotFoundException::new);
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(MemberNotFoundException::new);
-        reportRepository.save(new Report(request.getReportType(),
-                request.getContent(),
-                member,
-                post,
+
+        reportRepository.save(new Report(request.getReportType(), request.getContent(), member, post,
                 post == null ? null : post.getMember()));
     }
+
     @Transactional
     public void deleteReportByReportId(Long reportId) {
         Report report = reportRepository.findById(reportId)

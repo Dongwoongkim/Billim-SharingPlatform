@@ -32,20 +32,21 @@ public class PostImageHelper {
     }
 
     public static void addImages(List<PostImage> addList, List<PostImage> postImages, Post post) {
-        addList.stream().forEach(
-                i -> {
+        addList.stream()
+                .forEach(i -> {
                     postImages.add(i);
                     i.initPost(post);
                 });
+
     }
 
     private static void deleteImages(List<PostImage> deleteList, List<PostImage> postImages, Post post) {
-        deleteList.stream().forEach(
-                i -> {
-                    postImages.remove(i);
-                    i.cancel(post);
-                }
-        );
+        deleteList.stream()
+                .forEach(i -> {
+                            postImages.remove(i);
+                            i.cancel(post);
+                        }
+                );
     }
 
     public static Map<String, List<PostImage>> updateImage(PostUpdateRequest request, List<PostImage> postImages,

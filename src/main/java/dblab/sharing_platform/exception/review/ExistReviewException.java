@@ -1,4 +1,4 @@
 package dblab.sharing_platform.exception.review;
 
-public class ExistReviewException extends RuntimeException{
+public class ExistReviewException extends RuntimeException {
 }

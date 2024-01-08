@@ -1,4 +1,4 @@
 package dblab.sharing_platform.exception.oauth;
 
-public class OAuthUserNotFoundException extends RuntimeException{
+public class OAuthUserNotFoundException extends RuntimeException {
 }

@@ -3,17 +3,16 @@ package dblab.sharing_platform.dto.post;
 import dblab.sharing_platform.dto.item.ItemCreateRequest;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Lob;
+import javax.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.persistence.Lob;
-import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.List;
 
 @ApiModel(value = "게시글 생성 요청")
 @Data
@@ -40,5 +39,4 @@ public class PostCreateRequest {
     @ApiModelProperty(value = "물품", notes = "물품을 첨부하세요.")
     @Nullable
     private ItemCreateRequest itemCreateRequest;
-
 }

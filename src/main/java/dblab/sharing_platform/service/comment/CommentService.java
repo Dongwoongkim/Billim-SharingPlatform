@@ -12,11 +12,10 @@ import dblab.sharing_platform.exception.post.PostNotFoundException;
 import dblab.sharing_platform.repository.comment.CommentRepository;
 import dblab.sharing_platform.repository.member.MemberRepository;
 import dblab.sharing_platform.repository.post.PostRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,15 +32,17 @@ public class CommentService {
                 .orElseThrow(PostNotFoundException::new);
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(AuthenticationEntryPointException::new);
-        Comment parent = request.getParentCommentId() == null ? null : commentRepository.findById(request.getParentCommentId())
-                .orElseThrow(RootCommentNotFoundException::new);
+        Comment parent =
+                request.getParentCommentId() == null ? null : commentRepository.findById(request.getParentCommentId())
+                        .orElseThrow(RootCommentNotFoundException::new);
 
         Comment createComment = commentRepository.save(
                 new Comment(request.getContent(),
-                request.getParentCommentId() == null ? true : false,
-                post,
-                member,
-                parent));
+                        request.getParentCommentId() == null ? true : false,
+                        post,
+                        member,
+                        parent));
+
         return createComment.getId();
     }
 

@@ -1,4 +1,4 @@
 package dblab.sharing_platform.exception.trade;
 
-public class ImpossibleCreateTradeException extends RuntimeException{
+public class ImpossibleCreateTradeException extends RuntimeException {
 }

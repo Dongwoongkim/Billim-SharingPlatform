@@ -1,23 +1,22 @@
 package dblab.sharing_platform.service.mail;
 
 
+import static dblab.sharing_platform.config.mail.MailConfigInfo.HOST_EMAIL;
+
 import dblab.sharing_platform.domain.emailAuth.EmailAuth;
 import dblab.sharing_platform.exception.auth.AlreadySendAuthKeyException;
 import dblab.sharing_platform.exception.member.MemberNotFoundException;
 import dblab.sharing_platform.repository.emailAuth.EmailAuthRepository;
 import dblab.sharing_platform.repository.member.MemberRepository;
+import java.io.UnsupportedEncodingException;
+import java.util.Random;
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.io.UnsupportedEncodingException;
-import java.util.Random;
-
-import static dblab.sharing_platform.config.mail.MailConfigInfo.HOST_EMAIL;
 
 @RequiredArgsConstructor
 @Service
@@ -28,12 +27,12 @@ public class MailService {
     private static final String CHARSET = "utf-8";
     private static final String SUBTYPE = "html";
     private static final String PERSONAL = "SharingPlatform_Admin";
+    private String authKey;
 
     private final JavaMailSender emailSender;
     private final EmailAuthRepository emailAuthRepository;
     private final MemberRepository memberRepository;
-    private String authKey;
-
+    
     @Transactional
     public void sendSignUpMail(String email) {
         if (emailAuthRepository.existsByEmailAndPurpose(email, SIGN_UP)) {
@@ -54,7 +53,8 @@ public class MailService {
         sendMail(email, RESET_PASSWORD);
     }
 
-    public MimeMessage creatMessage(String email, String purpose) throws MessagingException, UnsupportedEncodingException {
+    public MimeMessage creatMessage(String email, String purpose)
+            throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = setMessageContent(email, purpose);
         return message;
     }
@@ -72,7 +72,7 @@ public class MailService {
         return key;
     }
 
-    private void sendMail(String email, String purpose){
+    private void sendMail(String email, String purpose) {
         MimeMessage message = null;
 
         try {
@@ -91,7 +91,8 @@ public class MailService {
         }
     }
 
-    private MimeMessage setMessageContent(String email,String purpose) throws MessagingException, UnsupportedEncodingException {
+    private MimeMessage setMessageContent(String email, String purpose)
+            throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = emailSender.createMimeMessage();
         message.addRecipients(MimeMessage.RecipientType.TO, email);
         String msgg = "";
@@ -123,7 +124,7 @@ public class MailService {
                 msgg += "<div align='center' style='border:1px solid black'>";
                 msgg += "<h3 style='color:blue'>회원가입 인증코드 입니다</h3>";
                 msgg += "<div style='font-size:130%'>";
-                msgg += "<strong>" + authKey + "</strong></div><br/>" ;
+                msgg += "<strong>" + authKey + "</strong></div><br/>";
                 msgg += "</div>";
                 break;
         }

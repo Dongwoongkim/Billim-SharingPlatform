@@ -1,4 +1,4 @@
 package dblab.sharing_platform.exception.review;
 
-public class ImpossibleWriteReviewException extends RuntimeException{
+public class ImpossibleWriteReviewException extends RuntimeException {
 }

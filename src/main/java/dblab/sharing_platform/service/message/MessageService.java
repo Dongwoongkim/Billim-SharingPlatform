@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class MessageService {
     private static final String ARRIVE_MESSAGE = "님으로부터 메시지가 도착했습니다.";
+
     private final MessageRepository messageRepository;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
@@ -55,11 +56,11 @@ public class MessageService {
         return MessageDto.toDto(message);
     }
 
-    public PagedMessageListDto findSendMessageByCurrentUser(MessagePagingCondition cond){
+    public PagedMessageListDto findSendMessageByCurrentUser(MessagePagingCondition cond) {
         return PagedMessageListDto.toDto(messageRepository.findAllBySendMember(cond));
     }
 
-    public PagedMessageListDto findReceiveMessageByCurrentUser(MessagePagingCondition cond){
+    public PagedMessageListDto findReceiveMessageByCurrentUser(MessagePagingCondition cond) {
         return PagedMessageListDto.toDto(messageRepository.findAllByReceiverMember(cond));
     }
 
@@ -94,7 +95,8 @@ public class MessageService {
                 .orElseThrow(PostNotFoundException::new);
 
         if (isEqualToPostWriter(receiver, post) || // 게시글 작성자와 메시지 수신자가 일치하거나
-                (isEqualToPostWriter(sender, post) && existedPreviousMessage(receiver, post))) { // 게시글에 대해 받은 메시지가 있는 경우
+                (isEqualToPostWriter(sender, post) && existedPreviousMessage(receiver,
+                        post))) { // 게시글에 대해 받은 메시지가 있는 경우
             return post;
         } else {
             throw new SendMessageException();

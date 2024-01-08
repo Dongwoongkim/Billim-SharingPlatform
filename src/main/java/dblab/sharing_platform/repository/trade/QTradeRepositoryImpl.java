@@ -1,11 +1,15 @@
 package dblab.sharing_platform.repository.trade;
 
+import static com.querydsl.core.types.Projections.constructor;
+import static dblab.sharing_platform.domain.trade.QTrade.trade;
+
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import dblab.sharing_platform.domain.trade.Trade;
 import dblab.sharing_platform.dto.trade.TradeDto;
 import dblab.sharing_platform.dto.trade.TradePagingCondition;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -13,12 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
-
-import static com.querydsl.core.types.Projections.constructor;
-import static dblab.sharing_platform.domain.trade.QTrade.trade;
-
-public class QTradeRepositoryImpl extends QuerydslRepositorySupport implements QTradeRepository{
+public class QTradeRepositoryImpl extends QuerydslRepositorySupport implements QTradeRepository {
 
     private final JPAQueryFactory query;
 
@@ -89,21 +88,23 @@ public class QTradeRepositoryImpl extends QuerydslRepositorySupport implements Q
     private List<TradeDto> fetchAll(Predicate predicate, Pageable pageable) {
         return getQuerydsl().applyPagination(
                 pageable,
-                query
-                        .select(
-                                constructor(TradeDto.class,
-                                        trade.id,
-                                        trade.post.id,
-                                        trade.post.title,
-                                        trade.renderMember.nickname,
-                                        trade.borrowerMember.nickname
-                                ))
+                query.select(constructor(TradeDto.class,
+                                trade.id,
+                                trade.post.id,
+                                trade.post.title,
+                                trade.renderMember.nickname,
+                                trade.borrowerMember.nickname
+                        ))
                         .from(trade)
                         .where(predicate)
                         .orderBy(trade.id.asc())
         ).fetch();
     }
-    private Long fetchCount(Predicate predicate) { // 7
-        return query.select(trade.count()).from(trade).where(predicate).fetchOne();
+
+    private Long fetchCount(Predicate predicate) {
+        return query.select(trade.count())
+                .from(trade)
+                .where(predicate)
+                .fetchOne();
     }
 }

@@ -1,16 +1,14 @@
 package dblab.sharing_platform.dto.report;
 
 import dblab.sharing_platform.domain.embedded.report_type.ReportType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import lombok.Data;
 
-@AllArgsConstructor
 @Data
 public class ReportPagingCondition {
+
     @NotNull(message = "페이지 번호를 입력해주세요.")
     @PositiveOrZero(message = "0 이상의 올바른 페이지 번호를 입력해주세요.")
     private Integer page;

@@ -96,7 +96,7 @@ public class PostService {
     public void deletePostByPostId(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(PostNotFoundException::new);
-        
+
         postRepository.delete(post);
         deleteImagesFromServer(post);
     }
@@ -124,10 +124,12 @@ public class PostService {
     }
 
     public void uploadImagesToServer(List<PostImage> postImages, List<MultipartFile> fileImages) {
-        if (!postImages.isEmpty()) {
-            for (int i = 0; i < postImages.size(); i++) {
-                fileService.upload(fileImages.get(i), postImages.get(i).getUniqueName(), FOLDER_NAME_POST);
-            }
+        if (postImages.isEmpty()) {
+            return;
+        }
+        
+        for (int i = 0; i < postImages.size(); i++) {
+            fileService.upload(fileImages.get(i), postImages.get(i).getUniqueName(), FOLDER_NAME_POST);
         }
     }
 

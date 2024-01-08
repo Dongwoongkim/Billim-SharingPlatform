@@ -1,6 +1,4 @@
 package dblab.sharing_platform.exception.auth;
 
-
-// Filter
-public class ValidateTokenException extends RuntimeException{
+public class ValidateTokenException extends RuntimeException {
 }

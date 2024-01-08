@@ -23,8 +23,7 @@ public class ReviewResponse {
                     review.getTrade().getId(),
                     review.getContent(),
                     review.getWriter().getNickname());
-        } else {
-            return null;
         }
+        return null;
     }
 }

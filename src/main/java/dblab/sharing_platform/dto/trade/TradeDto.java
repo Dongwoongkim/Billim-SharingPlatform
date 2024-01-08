@@ -2,10 +2,12 @@ package dblab.sharing_platform.dto.trade;
 
 import dblab.sharing_platform.domain.trade.Trade;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TradeDto {
 
@@ -21,12 +23,5 @@ public class TradeDto {
                 trade.getPost().getTitle(),
                 trade.getRenderMember().getNickname(),
                 trade.getBorrowerMember().getNickname());
-    }
-    public TradeDto(Long tradeId, Long postId, String postTitle, String renderMember, String borrowerMember) {
-        this.tradeId = tradeId;
-        this.postId = postId;
-        this.postTitle = postTitle;
-        this.renderMember = renderMember;
-        this.borrowerMember = borrowerMember;
     }
 }

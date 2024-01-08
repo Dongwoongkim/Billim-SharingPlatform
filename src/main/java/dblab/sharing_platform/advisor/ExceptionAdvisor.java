@@ -1,6 +1,6 @@
 package dblab.sharing_platform.advisor;
 
-import dblab.sharing_platform.dto.response.Response;
+import dblab.sharing_platform.dto.response_no_usage.Response;
 import dblab.sharing_platform.exception.auth.AccessDeniedException;
 import dblab.sharing_platform.exception.auth.AlreadyExistsMemberException;
 import dblab.sharing_platform.exception.auth.AlreadySendAuthKeyException;
@@ -297,12 +297,13 @@ public class ExceptionAdvisor {
     public Response tokenNotFoundException(TokenNotFoundException e) {
         return getFailureResponse("NOT_FOUND.CODE", "TOKEN_NOT_FOUND.MSG");
     }
+
     private Response getFailureResponse(String code, String msg) {
         return Response.failure(getCode(code), getMessage(msg));
     }
 
     private Integer getCode(String code) {
-        return Integer.valueOf(ms.getMessage(code,null, null));
+        return Integer.valueOf(ms.getMessage(code, null, null));
     }
 
     private String getMessage(String msg) {

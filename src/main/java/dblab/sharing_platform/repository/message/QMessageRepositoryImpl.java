@@ -1,22 +1,21 @@
 package dblab.sharing_platform.repository.message;
 
+import static com.querydsl.core.types.Projections.constructor;
+import static dblab.sharing_platform.domain.message.QMessage.message;
+
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import dblab.sharing_platform.domain.message.Message;
 import dblab.sharing_platform.dto.message.MessageDto;
 import dblab.sharing_platform.dto.message.MessagePagingCondition;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.util.StringUtils;
-
-import java.util.List;
-
-import static com.querydsl.core.types.Projections.constructor;
-import static dblab.sharing_platform.domain.message.QMessage.message;
 
 public class QMessageRepositoryImpl extends QuerydslRepositorySupport implements QMessageRepository {
 
@@ -53,7 +52,6 @@ public class QMessageRepositoryImpl extends QuerydslRepositorySupport implements
         }
 
         builder.and(message.deleteBySender.eq(false));
-
         return builder;
     }
 
@@ -67,8 +65,8 @@ public class QMessageRepositoryImpl extends QuerydslRepositorySupport implements
         if (StringUtils.hasText(cond.getSenderName())) {
             builder.and(message.sendMember.nickname.eq(cond.getSenderName()));
         }
-        builder.and(message.deleteByReceiver.eq(false));
 
+        builder.and(message.deleteByReceiver.eq(false));
         return builder;
     }
 
@@ -76,8 +74,7 @@ public class QMessageRepositoryImpl extends QuerydslRepositorySupport implements
     private List<MessageDto> fetchAll(Predicate predicate, Pageable pageable) {
         return getQuerydsl().applyPagination(
                 pageable,
-                query
-                        .select(constructor(MessageDto.class,
+                query.select(constructor(MessageDto.class,
                                 message.id,
                                 message.content,
                                 message.sendMember.nickname,
