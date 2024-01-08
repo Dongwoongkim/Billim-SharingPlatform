@@ -1,12 +1,12 @@
 package dblab.sharing_platform.domain.embedded.item;
 
 import dblab.sharing_platform.dto.item.ItemCreateRequest;
+import dblab.sharing_platform.dto.item.ItemUpdateRequest;
+import javax.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Embeddable;
 
 @Data
 @Embeddable
@@ -20,10 +20,10 @@ public class Item {
 
     private Long quantity;
 
-    public void updateItem(String name, Long price, Long quantity) {
-        this.name = name;
-        this.quantity = quantity;
-        this.price = price;
+    public void updateItem(ItemUpdateRequest itemUpdateRequest) {
+        this.name = itemUpdateRequest.getName();
+        this.quantity = itemUpdateRequest.getQuantity();
+        this.price = itemUpdateRequest.getPrice();
     }
 
     public static Item toEntity(ItemCreateRequest itemCreateRequest) {
@@ -31,5 +31,4 @@ public class Item {
                 itemCreateRequest.getPrice(),
                 itemCreateRequest.getQuantity());
     }
-
 }

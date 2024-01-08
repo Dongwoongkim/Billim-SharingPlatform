@@ -3,12 +3,6 @@ package dblab.sharing_platform.domain.comment;
 import dblab.sharing_platform.domain.base.BaseTime;
 import dblab.sharing_platform.domain.member.Member;
 import dblab.sharing_platform.domain.post.Post;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,6 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -32,6 +31,7 @@ public class Comment extends BaseTime {
     private String content;
 
     private boolean deleted;
+
     private boolean root;
 
     @ManyToOne(fetch = FetchType.LAZY)

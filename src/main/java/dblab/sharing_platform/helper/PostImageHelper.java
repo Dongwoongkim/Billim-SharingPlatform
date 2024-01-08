@@ -3,27 +3,29 @@ package dblab.sharing_platform.helper;
 import dblab.sharing_platform.domain.image.PostImage;
 import dblab.sharing_platform.domain.post.Post;
 import dblab.sharing_platform.dto.post.PostUpdateRequest;
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class PostImageHelper {
+
     private static final String DELETE_LIST = "deleteList";
     private static final String ADD_LIST = "addList";
 
-    public static List<PostImage> addToDBAndServer(List<MultipartFile> addImages, List<PostImage> postImages, Post post) {
+    public static List<PostImage> addToDBAndServer(List<MultipartFile> addImages, List<PostImage> postImages,
+                                                   Post post) {
         List<PostImage> addPostImageList = MultipartToImage(addImages);
         addImages(addPostImageList, postImages, post);
         return addPostImageList;
     }
 
-    public static List<PostImage> deleteFromDBAndServer(List<String> deleteImageNames, List<PostImage> postImages, Post post) {
+    public static List<PostImage> deleteFromDBAndServer(List<String> deleteImageNames, List<PostImage> postImages,
+                                                        Post post) {
         List<PostImage> deletePostImageList = StringToImage(deleteImageNames, postImages);
         deleteImages(deletePostImageList, postImages, post);
         return deletePostImageList;
@@ -46,25 +48,29 @@ public class PostImageHelper {
         );
     }
 
-    public static Map<String, List<PostImage>> updateImage(PostUpdateRequest request, List<PostImage> postImages, Post post) {
-        Map<String, List<PostImage>> m = new HashMap<>();
+    public static Map<String, List<PostImage>> updateImage(PostUpdateRequest request, List<PostImage> postImages,
+                                                           Post post) {
+        Map<String, List<PostImage>> updateImageMap = new HashMap<>();
 
         if (request.getAddImages() != null) {
             List<MultipartFile> addImages = request.getAddImages();
             List<PostImage> addList = addToDBAndServer(addImages, postImages, post);
-            m.put(ADD_LIST, addList);
+            updateImageMap.put(ADD_LIST, addList);
         }
 
         if (request.getDeleteImageNames() != null) {
             List<String> deleteImageNames = request.getDeleteImageNames();
             List<PostImage> deleteList = deleteFromDBAndServer(deleteImageNames, postImages, post);
-            m.put(DELETE_LIST, deleteList);
+            updateImageMap.put(DELETE_LIST, deleteList);
         }
-        return m;
+
+        return updateImageMap;
     }
 
     private static Optional<PostImage> convertNameToImage(String name, List<PostImage> postImages) {
-        return postImages.stream().filter(i -> i.getOriginName().equals(name)).findAny();
+        return postImages.stream()
+                .filter(i -> i.getOriginName().equals(name))
+                .findAny();
     }
 
     private static List<PostImage> StringToImage(List<String> deleteImageNames, List<PostImage> postImages) {

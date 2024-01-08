@@ -2,15 +2,14 @@ package dblab.sharing_platform.dto.post;
 
 import dblab.sharing_platform.dto.item.ItemUpdateRequest;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -25,7 +24,7 @@ public class PostUpdateRequest {
     @Nullable
     private String content;
 
-    @ApiModelProperty(value = "물품", notes = "수정할 물품정보를 입력하세요.", required = false)
+    @ApiModelProperty(value = "물품", notes = "수정할 물품정보를 입력하세요.")
     @Nullable
     private ItemUpdateRequest itemUpdateRequest;
 

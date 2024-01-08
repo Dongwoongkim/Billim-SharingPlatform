@@ -1,19 +1,18 @@
 package dblab.sharing_platform.domain.post;
 
+import static dblab.sharing_platform.helper.PostImageHelper.addImages;
+import static dblab.sharing_platform.helper.PostImageHelper.updateImage;
+
 import dblab.sharing_platform.domain.base.BaseTime;
 import dblab.sharing_platform.domain.category.Category;
 import dblab.sharing_platform.domain.embedded.item.Item;
 import dblab.sharing_platform.domain.image.PostImage;
 import dblab.sharing_platform.domain.member.Member;
-import dblab.sharing_platform.dto.item.ItemUpdateRequest;
 import dblab.sharing_platform.dto.post.PostUpdateRequest;
 import dblab.sharing_platform.dto.post.PostUpdateResponse;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -25,12 +24,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static dblab.sharing_platform.helper.PostImageHelper.addImages;
-import static dblab.sharing_platform.helper.PostImageHelper.updateImage;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -88,7 +86,7 @@ public class Post extends BaseTime {
         this.content = request.getContent();
 
         if (request.getItemUpdateRequest() != null) {
-            this.item = ItemUpdateRequest.toEntity(request.getItemUpdateRequest());
+            this.item.updateItem(request.getItemUpdateRequest());
         }
 
         Map<String, List<PostImage>> m = updateImage(request, this.postImages, this);
@@ -96,11 +94,11 @@ public class Post extends BaseTime {
     }
 
     public void likeUp() {
-        this.likes ++;
+        this.likes++;
     }
 
     public void likeDown() {
-        this.likes --;
+        this.likes--;
     }
 
     public void completed(boolean value) {

@@ -1,7 +1,6 @@
 package dblab.sharing_platform.dto.item;
 
 
-import dblab.sharing_platform.domain.embedded.item.Item;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
@@ -23,10 +22,4 @@ public class ItemUpdateRequest {
 
     @ApiModelProperty(value = "개수", notes = "개수를 입력해주세요", required = true)
     private Long quantity;
-
-    public static Item toEntity(ItemUpdateRequest itemUpdateRequest) {
-        return new Item(itemUpdateRequest.getName(),
-                itemUpdateRequest.getPrice(),
-                itemUpdateRequest.getQuantity());
-    }
 }
