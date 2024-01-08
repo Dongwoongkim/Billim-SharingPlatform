@@ -32,6 +32,6 @@ public class PostPagingCondition {
     }
 
     private int getDefaultPageSize() {
-        return 6;
+        return 60;
     }
 }
