@@ -23,14 +23,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Api(value = "Sign Controller", tags = "Sign")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
 public class SignController {
 
     private final SignService signService;
@@ -78,7 +76,7 @@ public class SignController {
                                       @Value("${spring.security.oauth2.client.registration.kakao.client-id}") String clientId,
                                       @Value("${spring.security.oauth2.client.registration.kakao.client-secret}") String clientSecret,
                                       @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}") String redirectUri) {
-
+        
         AccessTokenRequest accessTokenRequest = new AccessTokenRequest(clientId, clientSecret, redirectUri);
         OAuth2MemberCreateRequest req = oAuthService.getAccessToken(code, "kakao", accessTokenRequest);
 

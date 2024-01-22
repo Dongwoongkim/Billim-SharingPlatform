@@ -13,6 +13,14 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import java.security.Key;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,17 +29,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import java.security.Key;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 @Component
 public class TokenProvider {
+
     private static final String AUTH_KEY = "AUTHORITY";
     private static final String AUTH_ID = "ID";
     private static final String AUTH_USERNAME = "USERNAME";
@@ -47,7 +47,7 @@ public class TokenProvider {
     public TokenProvider(@Value("${jwt.token-validity-in-seconds}") long tokenValiditySeconds,
                          @Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityMilliSeconds,
                          @Value("${jwt.secret_key}") String originSecretKey, RefreshTokenRepository tokenRepository) {
-        this.tokenValidityMilliSeconds =  tokenValiditySeconds * 1000;
+        this.tokenValidityMilliSeconds = tokenValiditySeconds * 1000;
         this.refreshTokenValidityMilliSeconds = refreshTokenValidityMilliSeconds * 1000;
         this.originSecretKey = originSecretKey;
         this.refreshTokenRepository = tokenRepository;
@@ -60,7 +60,6 @@ public class TokenProvider {
     }
 
     public String createToken(Authentication authentication, String type) {
-
         MemberDetails principal = (MemberDetails) authentication.getPrincipal();
 
         String authorities = principal.getAuthorities().stream()
@@ -72,7 +71,7 @@ public class TokenProvider {
 
         if (type.equals(ACCESS)) {
             validity = new Date(now + this.tokenValidityMilliSeconds);
-        } else if(type.equals(REFRESH)){
+        } else if (type.equals(REFRESH)) {
             validity = new Date(now + this.refreshTokenValidityMilliSeconds);
         }
 
@@ -86,7 +85,7 @@ public class TokenProvider {
     }
 
     @Transactional
-    public void reIssueRefreshToken(Authentication authentication){
+    public void reIssueRefreshToken(Authentication authentication) {
         RefreshToken token = refreshTokenRepository.findByUsername(authentication.getName())
                 .orElseThrow(TokenNotFoundException::new);
         String newRefreshToken = createToken(authentication, REFRESH);
@@ -94,7 +93,6 @@ public class TokenProvider {
     }
 
     public Authentication getAuthenticationFromToken(String token) {
-
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
@@ -103,9 +101,15 @@ public class TokenProvider {
 
         List<String> authorities = Arrays.asList(claims.get(AUTH_KEY).toString().split(","));
 
-        List<? extends GrantedAuthority> simpleGrantedAuthorities = authorities.stream().map(auth -> new SimpleGrantedAuthority(auth)).collect(Collectors.toList());
+        List<? extends GrantedAuthority> simpleGrantedAuthorities = authorities.stream()
+                .map(auth -> new SimpleGrantedAuthority(auth))
+                .collect(Collectors.toList());
 
-        MemberDetails principal = new MemberDetails((String) claims.get(AUTH_ID),(String) claims.get(AUTH_USERNAME), null, simpleGrantedAuthorities, Map.of());
+        MemberDetails principal = new MemberDetails((String) claims.get(AUTH_ID),
+                (String) claims.get(AUTH_USERNAME),
+                null,
+                simpleGrantedAuthorities,
+                Map.of());
 
         return new UsernamePasswordAuthenticationToken(principal, token, simpleGrantedAuthorities);
     }
@@ -132,8 +136,10 @@ public class TokenProvider {
         }
     }
 
-    public Boolean refreshTokenValidation(String token) {
-        if(!validateToken(token)) return false;
+    public Boolean validateRefreshToken(String token) {
+        if (!validateToken(token)) {
+            return false;
+        }
 
         Authentication authentication = getAuthenticationFromToken(token);
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUsername(authentication.getName());

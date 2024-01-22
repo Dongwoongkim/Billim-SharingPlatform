@@ -5,11 +5,9 @@ import dblab.sharing_platform.domain.image.ProfileImage;
 import dblab.sharing_platform.domain.role.Role;
 import dblab.sharing_platform.dto.member.MemberUpdateRequest;
 import dblab.sharing_platform.dto.member.OAuthMemberUpdateRequest;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -21,14 +19,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class  Member {
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +36,7 @@ public class  Member {
 
     @Column(nullable = false, updatable = false)
     private String username;
+
     @Column(nullable = false)
     private String password;
 
@@ -61,7 +61,8 @@ public class  Member {
     @JoinColumn(name = "profile_image_id")
     private ProfileImage profileImage;
 
-    public Member(String username, String password, String nickname, String phoneNumber, Address address, String provider, List<Role> roles) {
+    public Member(String username, String password, String nickname, String phoneNumber, Address address,
+                  String provider, List<Role> roles) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
@@ -74,11 +75,14 @@ public class  Member {
     }
 
     private void addRoles(List<Role> roles) {
-        List<MemberRole> roleList = roles.stream().map(role -> new MemberRole(this, role)).collect(Collectors.toList());
+        List<MemberRole> roleList = roles.stream()
+                .map(role -> new MemberRole(this, role))
+                .collect(Collectors.toList());
+
         this.roles = roleList;
     }
 
-    public void updateMember(MemberUpdateRequest memberUpdateRequest){
+    public void updateMember(MemberUpdateRequest memberUpdateRequest) {
         this.nickname = memberUpdateRequest.getNickname();
         this.phoneNumber = memberUpdateRequest.getPhoneNumber();
         this.address = memberUpdateRequest.getAddress();
@@ -104,7 +108,7 @@ public class  Member {
         this.password = password;
     }
 
-    public String updateOAuthMember(OAuthMemberUpdateRequest request){
+    public String updateOAuthMember(OAuthMemberUpdateRequest request) {
         this.phoneNumber = request.getPhoneNumber();
         this.nickname = request.getNickname();
         this.address = request.getAddress();

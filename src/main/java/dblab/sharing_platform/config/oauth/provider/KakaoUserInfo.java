@@ -1,12 +1,14 @@
 package dblab.sharing_platform.config.oauth.provider;
 
+import static dblab.sharing_platform.config.oauth.provider.OAuthInfo.EMAIL;
+import static dblab.sharing_platform.config.oauth.provider.OAuthInfo.KAKAO;
+import static dblab.sharing_platform.config.oauth.provider.OAuthInfo.KAKAO_ACCOUNT;
+import static dblab.sharing_platform.config.oauth.provider.OAuthInfo.PROFILE_NICKNAME;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dblab.sharing_platform.domain.embedded.address.Address;
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import java.util.Map;
-
-import static dblab.sharing_platform.config.oauth.provider.OAuthInfo.*;
 
 public class KakaoUserInfo implements OAuth2UserInfo {
     private Map<String, Object> attributes;
@@ -21,7 +23,7 @@ public class KakaoUserInfo implements OAuth2UserInfo {
     }
 
     @Override
-    public String getPhoneNumber(){
+    public String getPhoneNumber() {
         return "";
     }
 
@@ -29,9 +31,11 @@ public class KakaoUserInfo implements OAuth2UserInfo {
     public String getEmail() {
         ObjectMapper objectMapper = new ObjectMapper();
         Object kakaoAccount = attributes.get(KAKAO_ACCOUNT);
-        Map<String, Object> account = objectMapper.convertValue(kakaoAccount, new TypeReference<Map<String, Object>>() {});
+        Map<String, Object> account = objectMapper.convertValue(kakaoAccount, new TypeReference<Map<String, Object>>() {
+        });
         return (String) account.get(EMAIL);
     }
+
     @Override
     public String getName() {
         return (String) attributes.get(PROFILE_NICKNAME);
@@ -39,6 +43,6 @@ public class KakaoUserInfo implements OAuth2UserInfo {
 
     @Override
     public Address getAddress() {
-        return new Address("","","","");
+        return new Address("", "", "", "");
     }
 }

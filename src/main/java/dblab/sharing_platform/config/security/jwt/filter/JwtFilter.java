@@ -1,20 +1,19 @@
 package dblab.sharing_platform.config.security.jwt.filter;
 
+import static dblab.sharing_platform.config.security.jwt.provider.TokenProvider.ACCESS;
+
 import dblab.sharing_platform.config.security.jwt.provider.TokenProvider;
+import java.io.IOException;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-import static dblab.sharing_platform.config.security.jwt.provider.TokenProvider.ACCESS;
 
 @Component
 @RequiredArgsConstructor
@@ -24,11 +23,12 @@ public class JwtFilter extends OncePerRequestFilter {
     public static final String AUTH_HEADER = "Authorization";
     public static final String BEARER = "Bearer ";
     public static final String REFRESH_HEADER = "Auth";
-    public static final String LOGIN_PATH = "/login";
+    public static final String LOGIN_PATH = "/api/auth/login";
     public static final String EXCEPTION_PATH = "/exception";
 
     @Override
-    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
         String accessToken = extractTokenFromRequest(request, AUTH_HEADER);
         String refreshToken = request.getHeader(REFRESH_HEADER);
 
@@ -45,7 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (validateExpire(accessToken) && validateExpire(refreshToken)) {
             SecurityContextHolder.getContext().setAuthentication(tokenProvider.getAuthenticationFromToken(accessToken));
         } else if (!validateExpire(accessToken) && validateExpire(refreshToken)) {
-            if (tokenProvider.refreshTokenValidation(refreshToken)) {
+            if (tokenProvider.validateRefreshToken(refreshToken)) {
                 Authentication authentication = tokenProvider.getAuthenticationFromToken(refreshToken);
                 String newAccessToken = tokenProvider.createToken(authentication, ACCESS);
                 Authentication newAuthentication = tokenProvider.getAuthenticationFromToken(newAccessToken);

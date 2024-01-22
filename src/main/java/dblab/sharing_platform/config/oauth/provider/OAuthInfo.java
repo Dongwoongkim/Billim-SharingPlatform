@@ -19,8 +19,8 @@ public class OAuthInfo {
     public static final String UNLINK_URL_GOOGLE = "https://oauth2.googleapis.com/revoke?token=";
     public static final String UNLINK_URL_NAVER_FRONT = "https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=nX6jP4IgsXNpJRqbg0Q5&client_secret=1vNwHm8Yri&access_token=";
     public static final String UNLINK_URL_NAVER_END = "&service_provider=NAVER";
-    public static final String GRANT_TYPE = "grant_type=authorization_code";
-    public static final String CLIENT_ID =  "&client_id=";
+    public static final String GRANT_TYPE = "grant_type=authorwization_code";
+    public static final String CLIENT_ID = "&client_id=";
     public static final String CLIENT_SECRET = "&client_secret=";
     public static final String REDIRECT_URI = "&redirect_uri=";
     public static final String CODE = "&code=";
